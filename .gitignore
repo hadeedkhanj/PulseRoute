@@ -1,0 +1,11 @@
+# These are the compiled java files
+*.class
+bin/
+target/
+
+# local data files
+*.dat
+
+# vs code settings
+.vscode/
+*.log
