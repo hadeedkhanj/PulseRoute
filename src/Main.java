@@ -3,29 +3,97 @@ import model.BloodPacket;
 import model.Donor;
 import model.EmergencyRequest;
 import java.time.LocalDate;
+import service.MatchEngine;
+import java.util.ArrayList;
+import java.util.List;
 
 
 //using this class for testing the data model classes
 public class Main {
     public static void main(String[] args) {
 
+        
+
+        //THE FIRST PHASE OF TESTING!!!!
+
         //(should be on cooldown)
-        Donor donor1 = new Donor("D-101", "Ahmad Ali", "03001234567", BloodType.O_NEGATIVE, LocalDate.now().minusDays(30));
+        Donor donor1 = new Donor("FA25-BCS-116", "Hadeed Khan", "03001234567", BloodType.O_NEGATIVE, LocalDate.now().minusDays(30));
         
         //(should be eligible)
-        Donor donor2 = new Donor("D-102", "Usman Khan", "03119876543", BloodType.A_POSITIVE, LocalDate.now().minusDays(100));
+        Donor donor2 = new Donor("FA25-BCS-142", "Hassan Murtaza", "0311430000", BloodType.A_POSITIVE, LocalDate.now().minusDays(100));
 
         System.out.println(donor1);
         System.out.println(donor2);
         System.out.println();
 
 
-        BloodPacket packet = new BloodPacket("BP-501", "Blood Bank Shelf A", BloodType.O_NEGATIVE, LocalDate.now().plusDays(20), 450.0);
+        BloodPacket packet = new BloodPacket("BP-999", "Blood Bank Shelf A", BloodType.O_NEGATIVE, LocalDate.now().plusDays(20), 450.0);
         System.out.println(packet.getDetails());
         System.out.println();
 
 
-        EmergencyRequest request = new EmergencyRequest("REQ-901", "Hamza", "City Hospital", BloodType.O_NEGATIVE, 2, 45);
+        EmergencyRequest request = new EmergencyRequest("FA25-BCS-147", "Zaheer Khan", "AMC", BloodType.O_NEGATIVE, 2, 45);
         System.out.println(request);
+
+        
+
+        //THE SECOND PHASE OF TESTING!!!!
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        // creating an EmergencyRequest (example: the patient needs B+ blood)
+        EmergencyRequest request2 = new EmergencyRequest(
+                "REQ-111", 
+                "Syed Hamza", 
+                "Ayub Teaching Hospital", 
+                BloodType.B_POSITIVE, 
+                2, 
+                30
+        );
+
+        System.out.println("CRITICAL REQUEST LOGGED:");
+        System.out.println(request2);
+        System.out.println("--------------------------------------------------\n");
+
+        // creating a list of donors:
+        List<Donor> donorList = new ArrayList<>();
+        
+        // B+ and eligible
+        donorList.add(new Donor("D1", "Waqas Jadoon", "03001111111", BloodType.B_POSITIVE, LocalDate.now().minusDays(100)));
+        
+        //O- and eligible
+        donorList.add(new Donor("D2", "Dr. Mazhar", "03002222222", BloodType.O_NEGATIVE, LocalDate.now().minusDays(120)));
+        
+        // B+ but on 90day cooldown
+        donorList.add(new Donor("D3", "Shahmeer Jadoon", "03003333333", BloodType.B_POSITIVE, LocalDate.now().minusDays(15)));
+        
+        //A+ incompatible blood type
+        donorList.add(new Donor("D4", "Haad Afzal", "03004444444", BloodType.A_POSITIVE, LocalDate.now().minusDays(100)));
+
+        // creating a list of blood packets
+        List<BloodPacket> packetList = new ArrayList<>();
+        
+        //  B+ unexpired
+        packetList.add(new BloodPacket("BP-1", "Main Lab Storage", BloodType.B_POSITIVE, LocalDate.now().plusDays(15), 500.0));
+        
+        // B+ and expired!!
+        packetList.add(new BloodPacket("BP-2", "Emergency Room Ward", BloodType.B_POSITIVE, LocalDate.now().minusDays(2), 300.0));
+
+        // running the match engine
+        List<Donor> matchedDonors = MatchEngine.findMatchingDonors(request2, donorList);
+        List<BloodPacket> matchedPackets = MatchEngine.findMatchingPackets(request2, packetList);
+
+        //printing them out (how many found and the list of them including their details)
+        System.out.println("MATCHED ELIGIBLE DONORS (" + matchedDonors.size() + " found):");
+        for (Donor d : matchedDonors) {
+            System.out.println("  -> " + d.getName() + " (" + d.getBloodType() + ") | Contact: " + d.getPhone());
+        }
+
+        System.out.println("\nMATCHED AVAILABLE BLOOD PACKETS (" + matchedPackets.size() + " found):");
+        for (BloodPacket p : matchedPackets) {
+            System.out.println("  -> " + p.getDetails());
+        }
     }
 }
