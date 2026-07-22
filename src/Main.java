@@ -6,10 +6,16 @@ import java.time.LocalDate;
 import service.MatchEngine;
 import java.util.ArrayList;
 import java.util.List;
+import storage.DataManager;
 
 
-//using this class for testing the data model classes
+// using this class for testing the classes
 public class Main {
+
+    // file paths
+    private static final String DONORS_FILE = "donors.dat";
+    private static final String PACKETS_FILE = "packets.dat";
+    private static final String REQUESTS_FILE = "requests.dat";
     public static void main(String[] args) {
 
         
@@ -95,5 +101,62 @@ public class Main {
         for (BloodPacket p : matchedPackets) {
             System.out.println("  -> " + p.getDetails());
         }
+
+
+        // THE THIRD PHASE OF TESTING !!!!
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        // creating records in memory
+
+        List<Donor> originalDonors = new ArrayList<>();
+        originalDonors.add(new Donor("D1", "Waqas Jadoon", "03001111111", BloodType.B_POSITIVE, LocalDate.now().minusDays(100)));
+        originalDonors.add(new Donor("D2", "Dr. Mazhar", "03002222222", BloodType.O_NEGATIVE, LocalDate.now().minusDays(120)));
+
+        List<BloodPacket> originalPackets = new ArrayList<>();
+        originalPackets.add(new BloodPacket("BP11", "Main Storage", BloodType.B_POSITIVE, LocalDate.now().plusDays(15), 450.0));
+
+        List<EmergencyRequest> originalRequests = new ArrayList<>();
+        originalRequests.add(new EmergencyRequest("REQ-131", "Syed Hamza", "Ayub Teaching Hospital", BloodType.B_POSITIVE, 2, 30));
+
+        //saving these records to binary files
+        DataManager.saveData(originalDonors, DONORS_FILE);
+        DataManager.saveData(originalPackets, PACKETS_FILE);
+        DataManager.saveData(originalRequests, REQUESTS_FILE);
+
+        //simulating a system crash/reboot 
+        System.out.println("\n--------------------------------------------------");
+        System.out.println("SIMULATING SYSTEM CRASH / REBOOT (Wiping memory)...");
+        System.out.println("--------------------------------------------------\n");
+
+        originalDonors = null;
+        originalPackets = null;
+        originalRequests = null;
+
+        //reading data back from the files
+        List<Donor> recoveredDonors = DataManager.loadData(DONORS_FILE);
+        List<BloodPacket> recoveredPackets = DataManager.loadData(PACKETS_FILE);
+        List<EmergencyRequest> recoveredRequests = DataManager.loadData(REQUESTS_FILE);
+
+        //verifying the recovered data now
+        System.out.println("\n[RECOVERED DONORS]:");
+        for (Donor d : recoveredDonors) {
+            System.out.println("  -> " + d.getName() + " (" + d.getBloodType() + ") | Contact: " + d.getPhone());
+        }
+
+        System.out.println("\n[RECOVERED BLOOD PACKETS]:");
+        for (BloodPacket p : recoveredPackets) {
+            System.out.println("  -> " + p.getDetails());
+        }
+
+        System.out.println("\n[RECOVERED EMERGENCY REQUESTS]:");
+        for (EmergencyRequest r : recoveredRequests) {
+            System.out.println("  -> " + r);
+        }
+
+
+        
     }
 }
