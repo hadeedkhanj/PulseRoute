@@ -31,7 +31,7 @@ public class MainFrame extends JFrame {
         setTitle("PulseRoute - Emergency Resource Coordinator");
         setSize(950, 650);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         //loading data from files
         donorList = DataManager.loadData(DONORS_FILE);
@@ -65,9 +65,16 @@ public class MainFrame extends JFrame {
                 DataManager.saveData(donorList, DONORS_FILE);
                 DataManager.saveData(packetList, PACKETS_FILE);
                 DataManager.saveData(requestList, REQUESTS_FILE);
+
+                dispose();
+                System.exit(0);
             }
         });
+
     }    
+
+    
 }
+
 
 
