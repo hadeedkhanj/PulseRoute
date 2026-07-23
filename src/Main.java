@@ -143,20 +143,20 @@ public class Main {
         //verifying the recovered data now
         System.out.println("\n[RECOVERED DONORS]:");
         for (Donor d : recoveredDonors) {
-            System.out.println("  -> " + d.getName() + " (" + d.getBloodType() + ") | Contact: " + d.getPhone());
+            System.out.println(d.getName() + " (" + d.getBloodType() + ") | Contact: " + d.getPhone());
         }
 
         System.out.println("\n[RECOVERED BLOOD PACKETS]:");
         for (BloodPacket p : recoveredPackets) {
-            System.out.println("  -> " + p.getDetails());
+            System.out.println( p.getDetails());
         }
 
         System.out.println("\n[RECOVERED EMERGENCY REQUESTS]:");
         for (EmergencyRequest r : recoveredRequests) {
-            System.out.println("  -> " + r);
+            System.out.println(r);
         }
 
 
-        
+
     }
 }
