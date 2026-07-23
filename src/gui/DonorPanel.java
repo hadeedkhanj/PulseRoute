@@ -13,7 +13,7 @@ import java.util.List;
 
 // it handles registering new donors and viewing existing ones in a JTable
 // when a donor is registered, it updates the UI and automatically saves it
-public class DonorPanel extends JLabel {
+public class DonorPanel extends JPanel {
     
     private List<Donor> donorList;
     private String filePath;
