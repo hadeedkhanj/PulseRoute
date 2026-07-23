@@ -7,6 +7,8 @@ import service.MatchEngine;
 import java.util.ArrayList;
 import java.util.List;
 import storage.DataManager;
+import gui.MainFrame;
+import javax.swing.SwingUtilities;
 
 
 // using this class for testing the classes
@@ -67,10 +69,10 @@ public class Main {
         List<Donor> donorList = new ArrayList<>();
         
         // B+ and eligible
-        donorList.add(new Donor("D1", "Waqas Jadoon", "03001111111", BloodType.B_POSITIVE, LocalDate.now().minusDays(100)));
+        donorList.add(new Donor("D-101", "Waqas Jadoon", "03001111111", BloodType.B_POSITIVE, LocalDate.now().minusDays(100)));
         
         //O- and eligible
-        donorList.add(new Donor("D2", "Dr. Mazhar", "03002222222", BloodType.O_NEGATIVE, LocalDate.now().minusDays(120)));
+        donorList.add(new Donor("D-102", "Dr. Mazhar", "03002222222", BloodType.O_NEGATIVE, LocalDate.now().minusDays(120)));
         
         // B+ but on 90day cooldown
         donorList.add(new Donor("D3", "Shahmeer Jadoon", "03003333333", BloodType.B_POSITIVE, LocalDate.now().minusDays(15)));
@@ -112,14 +114,14 @@ public class Main {
         // creating records in memory
 
         List<Donor> originalDonors = new ArrayList<>();
-        originalDonors.add(new Donor("D1", "Waqas Jadoon", "03001111111", BloodType.B_POSITIVE, LocalDate.now().minusDays(100)));
-        originalDonors.add(new Donor("D2", "Dr. Mazhar", "03002222222", BloodType.O_NEGATIVE, LocalDate.now().minusDays(120)));
+        originalDonors.add(new Donor("D-101", "Waqas Jadoon", "03001111111", BloodType.B_POSITIVE, LocalDate.now().minusDays(100)));
+        originalDonors.add(new Donor("D-102", "Dr. Mazhar", "03002222222", BloodType.O_NEGATIVE, LocalDate.now().minusDays(120)));
 
         List<BloodPacket> originalPackets = new ArrayList<>();
-        originalPackets.add(new BloodPacket("BP11", "Main Storage", BloodType.B_POSITIVE, LocalDate.now().plusDays(15), 450.0));
+        originalPackets.add(new BloodPacket("BP-501", "Main Storage", BloodType.B_POSITIVE, LocalDate.now().plusDays(15), 450.0));
 
         List<EmergencyRequest> originalRequests = new ArrayList<>();
-        originalRequests.add(new EmergencyRequest("REQ-131", "Syed Hamza", "Ayub Teaching Hospital", BloodType.B_POSITIVE, 2, 30));
+        originalRequests.add(new EmergencyRequest("REQ-901", "Syed Hamza", "Ayub Teaching Hospital", BloodType.B_POSITIVE, 2, 30));
 
         //saving these records to binary files
         DataManager.saveData(originalDonors, DONORS_FILE);
@@ -157,6 +159,16 @@ public class Main {
         }
 
 
+        // TESTING THE GUI !!!!
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame();
+            frame.setVisible(true);
+        });
 
     }
 }
