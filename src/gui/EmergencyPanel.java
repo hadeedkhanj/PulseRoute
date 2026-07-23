@@ -33,6 +33,8 @@ public class EmergencyPanel extends JPanel {
     private JTable matchedPacketsTable;
     private DefaultTableModel matchedPacketsModel;
 
+    
+
     public EmergencyPanel(List<EmergencyRequest> requestList, List<Donor> donorList, 
             List<BloodPacket> packetList, String filePath) {
 
@@ -77,6 +79,17 @@ public class EmergencyPanel extends JPanel {
         String[] reqCols = {"Req ID", "Patient", "Hospital", "Blood Type", "Units", "Time Limit"};
         requestsModel = new DefaultTableModel(reqCols, 0);
         requestsTable = new JTable(requestsModel);
+
+        // applying emergency cell renderer across all table columns
+        EmergencyRowRenderer customRenderer = new EmergencyRowRenderer(requestList);
+
+        for (int i = 0; i < requestsTable.getColumnCount(); i++) {
+            requestsTable.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
+        }
+
+        // a live countdown timer that auto-refreshes every 10 seconds
+        Timer liveTimer = new Timer(10000, e -> refreshRequestsTable());
+        liveTimer.start();
 
         JScrollPane reqScroll = new JScrollPane(requestsTable);
         reqScroll.setBorder(BorderFactory.createTitledBorder("Active Emergency Requests (Click a row to match)"));
@@ -180,7 +193,7 @@ public class EmergencyPanel extends JPanel {
                 r.getHospitalName(),
                 r.getRequiredBloodType(),
                 r.getUnitsRequired(),
-                r.getTimeLimitMinutes() + " mins"
+                r.getTimeRemainingFormatted()
             });
         }
     }
