@@ -19,7 +19,8 @@ public class DataManager {
             oos.writeObject(dataList);
             System.out.println("[STORAGE] Successfully saved " + dataList.size() + " item(s) to " + filePath);
         } catch (IOException e) {
-            System.out.println("[ERROR] Failed to save data to " + filePath + ": " + e.getMessage());
+            System.out.println("[ERROR] Failed to save data to " + filePath);
+            e.printStackTrace();
         }
     }
 

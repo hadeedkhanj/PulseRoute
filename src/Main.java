@@ -9,6 +9,7 @@ import java.util.List;
 import storage.DataManager;
 import gui.MainFrame;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 
 
@@ -22,7 +23,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        
+        /* 
 
         //THE FIRST PHASE OF TESTING!!!!
 
@@ -158,7 +159,9 @@ public class Main {
         System.out.println("\n[RECOVERED EMERGENCY REQUESTS]:");
         for (EmergencyRequest r : recoveredRequests) {
             System.out.println(r);
-        }
+        } 
+
+        
 
 
         // TESTING THE GUI !!!!
@@ -166,6 +169,20 @@ public class Main {
         System.out.println();
         System.out.println();
         System.out.println();
+
+        */
+
+        // using java's built-in modern Nimbus theme
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Nimbus theme not available, using default.");
+        }
 
         SwingUtilities.invokeLater(() -> {
             MainFrame frame = new MainFrame();
