@@ -65,6 +65,14 @@ public class DonorPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createTitledBorder("Registered Donors Directory"));
         add(scrollPane, BorderLayout.CENTER);
 
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton deleteButton = new JButton("Delete Selected Donor");
+        deleteButton.setFocusPainted(false);
+        bottomPanel.add(deleteButton);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        deleteButton.addActionListener(e -> deleteSelectedDonor());
+
         //loading data to fill table
         refreshTable();
 
@@ -103,6 +111,27 @@ public class DonorPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Days must be a valid number", "Input Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+
+        private void deleteSelectedDonor() {
+            int selectedRow = donorTable.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a donor from the table to delete", "Selection Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                    "Are you sure you want to remove this donor record?", 
+                    "Confirm Delete", 
+                    JOptionPane.YES_NO_OPTION);
+
+            if (confirm == JOptionPane.YES_OPTION) {
+                donorList.remove(selectedRow);
+                DataManager.saveData(donorList, filePath); // Persist deletion to disk
+                refreshTable();
+                JOptionPane.showMessageDialog(this, "Donor removed successfully", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+
 
         public void refreshTable() {
             tableModel.setRowCount(0);

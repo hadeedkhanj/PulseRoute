@@ -118,6 +118,14 @@ public class EmergencyPanel extends JPanel {
         centerSplit.setDividerLocation(180);
         add(centerSplit, BorderLayout.CENTER);
 
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton resolveButton = new JButton("Resolve / Fulfill Request");
+        resolveButton.setFocusPainted(false);
+        bottomPanel.add(resolveButton);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        resolveButton.addActionListener(e -> resolveSelectedRequest());
+
         refreshRequestsTable();
         logButton.addActionListener(e -> logRequest());
 
@@ -183,6 +191,31 @@ public class EmergencyPanel extends JPanel {
             });
         }
     }
+
+    private void resolveSelectedRequest() {
+        int selectedRow = requestsTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an emergency case from the table to resolve", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Mark this case as resolved and clear it from queue?", 
+                "Confirm Case Resolution", 
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            requestList.remove(selectedRow);
+            DataManager.saveData(requestList, filePath);
+            
+            matchedDonorsModel.setRowCount(0);
+            matchedPacketsModel.setRowCount(0);
+            
+            refreshRequestsTable();
+            JOptionPane.showMessageDialog(this, "Emergency case marked resolved and cleared", "Case Closed", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
 
     public void refreshRequestsTable() {
         requestsModel.setRowCount(0);

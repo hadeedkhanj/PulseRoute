@@ -63,6 +63,14 @@ public class PacketPanel extends JPanel {
         scrollPane.setBorder(BorderFactory.createTitledBorder("Active Blood Inventory"));
         add(scrollPane, BorderLayout.CENTER);
 
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton deleteButton = new JButton("Delete");
+        deleteButton.setFocusPainted(false);
+        bottomPanel.add(deleteButton);
+        add(bottomPanel, BorderLayout.SOUTH);
+
+        deleteButton.addActionListener(e -> deleteSelectedPacket());
+
         refreshTable();
 
         addButton.addActionListener(e -> addPacket());
@@ -101,6 +109,27 @@ public class PacketPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Expiry days and volume must be valid numbers", "Input Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
+    private void deleteSelectedPacket() {
+        int selectedRow = packetTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a blood packet from the table to delete", "Selection Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to remove this blood packet from storage?", 
+                "Confirm Inventory Update", 
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            packetList.remove(selectedRow);
+            DataManager.saveData(packetList, filePath);   //saving the data after deleting
+            refreshTable();
+            JOptionPane.showMessageDialog(this, "Inventory updated successfully", "Record Updated", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
 
     public void refreshTable() {
         tableModel.setRowCount(0);
