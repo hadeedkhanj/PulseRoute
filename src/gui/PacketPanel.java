@@ -57,6 +57,7 @@ public class PacketPanel extends JPanel {
         String[] columnNames = {"Packet ID", "Location", "Blood Type", "Expiry Date", "Volume (ml)", "Status"};
         tableModel = new DefaultTableModel(columnNames, 0);
         packetTable = new JTable(tableModel);
+        
 
         JScrollPane scrollPane = new JScrollPane(packetTable);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Active Blood Inventory"));

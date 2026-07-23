@@ -16,10 +16,11 @@ import javax.swing.UIManager;
 // using this class for testing the classes
 public class Main {
 
-    // file paths
+    /*file paths
     private static final String DONORS_FILE = "donors.dat";
     private static final String PACKETS_FILE = "packets.dat";
     private static final String REQUESTS_FILE = "requests.dat";
+    */
 
     public static void main(String[] args) {
 
@@ -173,6 +174,7 @@ public class Main {
         */
 
         // using java's built-in modern Nimbus theme
+        
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

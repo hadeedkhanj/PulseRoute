@@ -2,6 +2,7 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.Duration;
 
 public class EmergencyRequest implements Serializable {
     
@@ -62,5 +63,21 @@ public class EmergencyRequest implements Serializable {
                requiredBloodType + " | Time Limit: " + timeLimitMinutes + " mins";
     }
 
-    
+    public int getMinutesRemaining() {
+        long minutesElapsed = Duration.between(requestTime, LocalDateTime.now()).toMinutes();
+        return timeLimitMinutes - (int) minutesElapsed;
+    }
+
+    public String getTimeRemainingFormatted() {
+        int remaining = getMinutesRemaining();
+        if (remaining < 0) {
+            return "EXPIRED (" + Math.abs(remaining) + "m ago)";
+        } else if (remaining == 0) {
+            return "CRITICAL (< 1m)";
+        } else {
+            return remaining + " mins left";
+        }
+    }
+
+
 }
